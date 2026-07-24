@@ -1,3 +1,0 @@
-# Confidential working document — not for indexing.
-User-agent: *
-Disallow: /
