@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CreditSwan.AI — Fetch Pet Insurance: Integrated Diligence Dashboard</title>
+<script src="/vendor/chart.umd.min.js"></script>
+<style>
+  :root{
+    --bg:#f6f4ef; --card:#e9e4da; --card2:#fdfcf8; --ink:#0f1b2d; --gold:#2e7d8f;
+    --gold-lt:#93bcc6; --red:#b0413a; --green:#3f6e4e; --muted:#6f6a60; --line:#dcd6ca;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:Georgia,'Times New Roman',serif;line-height:1.5}
+  .sans{font-family:'Helvetica Neue',Arial,sans-serif}
+  header{display:flex;justify-content:space-between;align-items:center;padding:22px 40px;border-bottom:2px solid var(--gold);position:sticky;top:0;background:var(--bg);z-index:50}
+  .brand{display:flex;align-items:center;gap:12px}
+  .brand .mark{width:40px;height:40px;flex:0 0 40px}
+  .brand .wordmark h1 span{color:var(--gold);font-weight:400}
+  .brand .wordmark .rule{height:2px;background:var(--gold);margin-top:4px;width:100%}
+  .brand h1{font-family:'Helvetica Neue',Arial,sans-serif;font-size:14px;letter-spacing:3.5px;font-weight:700}
+  header .tag{font-family:'Helvetica Neue',Arial,sans-serif;font-size:10px;letter-spacing:3px;color:var(--gold);text-transform:uppercase}
+  .hero{padding:48px 40px 28px;max-width:1250px;margin:0 auto}
+  .hero .eyebrow{font-family:'Helvetica Neue',Arial,sans-serif;font-size:11px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:12px}
+  .hero h2{font-size:42px;font-weight:400;line-height:1.15}
+  .hero h2 em{color:var(--gold);font-style:italic}
+  .hero p{margin-top:14px;max-width:840px;color:#3c4655;font-size:15px}
+  .meta{display:flex;gap:34px;margin-top:20px;flex-wrap:wrap;font-family:'Helvetica Neue',Arial,sans-serif;font-size:11.5px;color:var(--muted)}
+  .meta b{color:var(--ink);font-weight:600}
+  nav.tabs{display:flex;gap:4px;padding:0 40px;max-width:1250px;margin:24px auto 0;flex-wrap:wrap;border-bottom:1px solid var(--line)}
+  nav.tabs button{font-family:'Helvetica Neue',Arial,sans-serif;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;background:none;border:none;padding:12px 16px;cursor:pointer;color:var(--muted);border-bottom:3px solid transparent}
+  nav.tabs button.active{color:var(--ink);border-bottom-color:var(--gold);font-weight:700}
+  main{max-width:1250px;margin:0 auto;padding:30px 40px 70px}
+  section.tab{display:none}
+  section.tab.active{display:block;animation:fade .35s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  h3.sec{font-size:28px;font-weight:400;margin:8px 0 4px}
+  h3.sec em{color:var(--gold);font-style:italic}
+  .sub{font-family:'Helvetica Neue',Arial,sans-serif;font-size:12px;color:var(--muted);margin-bottom:22px}
+  .grid{display:grid;gap:16px}
+  .g3{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+  .g2{grid-template-columns:repeat(auto-fit,minmax(420px,1fr))}
+  .kpi{background:var(--card);border-radius:10px;padding:20px 22px}
+  .kpi .lbl{font-family:'Helvetica Neue',Arial,sans-serif;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:#6f7c85;margin-bottom:8px}
+  .kpi .val{font-size:34px;letter-spacing:-.5px}
+  .kpi .val small{font-size:14px;font-family:'Helvetica Neue',Arial,sans-serif;font-weight:700;margin-left:6px}
+  .up{color:var(--green)} .dn{color:var(--red)}
+  .kpi .note{font-family:'Helvetica Neue',Arial,sans-serif;font-size:11.5px;color:var(--muted);margin-top:8px}
+  .card{background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:22px 24px;margin-top:16px}
+  .card h4{font-family:'Helvetica Neue',Arial,sans-serif;font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:#6f7c85;margin-bottom:14px}
+  .chartbox{position:relative;height:320px}
+  .chartbox.tall{height:400px}
+  .read{background:var(--card);border-radius:10px;padding:16px 20px;margin-top:16px;font-size:14px}
+  .read b{color:var(--gold);font-style:italic;font-weight:700}
+  table{width:100%;border-collapse:collapse;font-family:'Helvetica Neue',Arial,sans-serif;font-size:12.5px}
+  th{text-align:left;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#6f7c85;padding:8px 10px;border-bottom:2px solid var(--line)}
+  td{padding:9px 10px;border-bottom:1px solid var(--line)}
+  tr.hl td{background:#d6e3e6;font-weight:700}
+  .pill{display:inline-block;padding:2px 10px;border-radius:20px;font-size:10px;letter-spacing:1px;text-transform:uppercase;font-weight:700}
+  .pill.prem{background:var(--ink);color:var(--card2)} .pill.mid{background:var(--gold-lt);color:var(--ink)} .pill.val{background:#cdd6db;color:var(--ink)}
+  .verdict{background:var(--ink);color:#eef4f5;border-radius:12px;padding:28px 32px;margin-top:20px}
+  .verdict h4{color:var(--gold-lt);font-family:'Helvetica Neue',Arial,sans-serif;letter-spacing:3px;font-size:11px;text-transform:uppercase;margin-bottom:12px}
+  .verdict p{font-size:15.5px;line-height:1.65}
+  .verdict p + p{margin-top:12px}
+  .verdict b{color:#fff}
+  details{background:var(--card2);border:1px solid var(--line);border-radius:10px;margin-top:10px;padding:0}
+  details summary{cursor:pointer;padding:16px 20px;font-family:'Helvetica Neue',Arial,sans-serif;font-size:13.5px;font-weight:700;list-style:none;display:flex;justify-content:space-between;align-items:center}
+  details summary::-webkit-details-marker{display:none}
+  details summary::after{content:'+';font-size:20px;color:var(--gold)}
+  details[open] summary::after{content:'–'}
+  details .body{padding:0 22px 18px;font-size:14px;color:#39424f}
+  details .body ul{margin-left:18px;margin-top:6px}
+  details .body li{margin-bottom:7px}
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:900px){.cols{grid-template-columns:1fr}nav.tabs,main,.hero,header,footer{padding-left:18px;padding-right:18px}.hero h2{font-size:30px}}
+  .heat td{text-align:center}
+  .num{font-variant-numeric:tabular-nums}
+  .imp{counter-reset:n}
+  .imp .item{display:flex;gap:20px;padding:18px 0;border-bottom:1px solid var(--line)}
+  .imp .item::before{counter-increment:n;content:"0" counter(n);font-style:italic;color:var(--gold);font-size:26px;min-width:44px}
+  .imp .item p{font-size:14.5px}
+  .imp .item b{font-family:'Helvetica Neue',Arial,sans-serif;font-size:13.5px}
+  footer{border-top:1px solid var(--line);padding:20px 40px;max-width:1250px;margin:0 auto;font-family:'Helvetica Neue',Arial,sans-serif;font-size:10.5px;color:var(--muted)}
+  .flag{border-left:4px solid var(--red);background:#f6e5e2;border-radius:0 8px 8px 0;padding:14px 18px;margin-top:14px;font-size:13.5px}
+  .flag.g{border-left-color:var(--green);background:#e4eee7}
+  .legendline{font-family:'Helvetica Neue',Arial,sans-serif;font-size:11px;color:var(--muted);margin-top:8px}
+  @media print{nav.tabs{display:none}section.tab{display:block!important;page-break-before:always}header{position:static}}
+</style>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <svg class="mark" viewBox="0 0 44 44" aria-label="CreditSwan.AI">
+      <circle cx="22" cy="22" r="21" fill="var(--ink)"/>
+      <path d="M13 30.5c0-6.6 4.3-12 9.8-12 2.2 0 3.6.7 4.4 1.6.6-1.6 1.6-2.9 2.9-3.8-.2 1.5.1 2.9.8 4l2.7-1.4-1.6 2.9c1 .5 1.9.7 2.9.7-1.4 1.4-3 2.2-4.6 2.4.1 6.6-4.6 11.4-11.2 11.4-3.4 0-6.3-1-8.1-2.3 2.5.2 4.6-.3 6.1-1.3-2.3-.4-4.1-1.4-5.1-2.2z" fill="var(--card2)"/>
+      <circle cx="30.4" cy="18.6" r="1" fill="var(--ink)"/>
+    </svg>
+    <div class="wordmark"><h1>CREDITSWAN<span>.AI</span></h1><div class="rule"></div></div>
+  </div>
+  <div class="tag">Diligence Intelligence Packet · July 2026</div>
+</header>
+
+<div class="hero">
+  <div class="eyebrow">CreditSwan.AI Intelligence Packet · Integrated Diligence Briefing · US Market</div>
+  <h2>Fetch Pet Insurance, <em>measured</em> — market, price, search &amp; the AI answer layer</h2>
+  <p>One synthesis of three workstreams: the U.S. pet-insurance ecosystem intelligence deck, the Fetch price-positioning &amp; disintermediation risk assessment, and the Semrush / SE Ranking search &amp; AI visibility benchmark. Originated by CreditSwan.AI and structured for a control-buyout / portfolio decision.</p>
+  <div class="meta">
+    <span><b>SUBJECT</b> — fetchpet.com · Warburg Pincus–owned premium pet insurer · ~550K pets · AXIS-underwritten</span>
+    <span><b>DATA</b> — 22–23 Jul 2026 pulls · public 2025–26 sources</span>
+    <span><b>VERDICT</b> — Margin-compression risk, not disintermediation · Conditional GO on category (narrow, distribution-led)</span>
+  </div>
+</div>
+
+<nav class="tabs" id="tabs">
+  <button data-t="overview" class="active">Overview</button>
+  <button data-t="market">Market &amp; Ownership</button>
+  <button data-t="price">Price Positioning</button>
+  <button data-t="search">Search &amp; Traffic</button>
+  <button data-t="ai">AI Answer Layer</button>
+  <button data-t="thesis">Thesis: Bull vs Bear</button>
+  <button data-t="action">Action Plan &amp; Triggers</button>
+</nav>
+
+<main>
+
+<!-- ══════════════ OVERVIEW ══════════════ -->
+<section class="tab active" id="overview">
+  <h3 class="sec">The franchise <em>at a glance</em></h3>
+  <p class="sub">Semrush 22–23 Jul 2026 · SE Ranking Jul 2026 · public 2025–26 market sources · arrows vs prior period</p>
+
+  <div class="grid g3">
+    <div class="kpi"><div class="lbl">Organic Traffic / Mo (US)</div><div class="val">86.9K<small class="up">+3.7%</small></div><div class="note">115.1K worldwide (+5.5%)</div></div>
+    <div class="kpi"><div class="lbl">Organic Keywords (US)</div><div class="val">30.9K<small class="dn">−6.0%</small></div><div class="note">Footprint ≈ −69% vs Aug ’24</div></div>
+    <div class="kpi"><div class="lbl">Organic Traffic Value</div><div class="val">$443.1K<small class="up">+18.8%</small></div><div class="note">Equivalent paid cost / mo (Semrush US)</div></div>
+    <div class="kpi"><div class="lbl">Branded Share of Traffic</div><div class="val">53%</div><div class="note">46.4K branded vs 40.5K non-branded (+7.4%)</div></div>
+    <div class="kpi"><div class="lbl">AI Answer Presence</div><div class="val">0.05%<small class="dn">falling</small></div><div class="note">AI Visibility 30 · 835 mentions · 1.7K cited pages</div></div>
+    <div class="kpi"><div class="lbl">Fetch Price Position (Dog)</div><div class="val">~$80–91<small>/mo</small></div><div class="note">Premium tier — 40–60% above Spot / Lemonade</div></div>
+    <div class="kpi"><div class="lbl">US Market GWP 2025</div><div class="val">~$5.2B<small class="up">+20.8%</small></div><div class="note">But growth is mostly rate action, not adoption</div></div>
+    <div class="kpi"><div class="lbl">US Pet Penetration</div><div class="val">4.27%</div><div class="note">Dogs 5.99% · Cats 2.29% · vs UK ~25%, Sweden 40%+</div></div>
+    <div class="kpi"><div class="lbl">Vet-Services Inflation</div><div class="val">~5.6–6.4%<small>YoY</small></div><div class="note">~2× general CPI · #1 cumulative-inflation category since 2019</div></div>
+  </div>
+
+  <div class="verdict">
+    <h4>CreditSwan.AI House View — One Paragraph</h4>
+    <p>Fetch is a <b>premium-priced, comprehensive-coverage brand</b> whose moat is <b>brand, not discovery</b>: “fetch pet insurance” holds #1 on 40.5K monthly searches and branded terms carry ~53% of organic visits, while the ranked-keyword base has thinned ~69% in two years and the AI answer layer sits effectively <b>unclaimed at 0.05%</b>. We <b>disagree with the strong disintermediation thesis</b> — pre-existing-condition switching costs lock in the ~550K-pet book, and vet inflation (~2× CPI) structurally prevents value players from staying cheap — but we <b>agree with a weaker margin-compression version</b>: AI/aggregator price transparency will intensify new-customer competition and inflate CAC over a 3–7 year horizon, squeezing a premium brand between value disruptors below and Trupanion’s vet-channel moat above. The category itself is a <b>conditional GO, narrow</b>: the durable PE value sits in asset-light distribution/administration (MGA/TPA, employer benefits, vet channel), not in carrying inflation-exposed underwriting risk.</p>
+  </div>
+
+  <div class="imp card">
+    <h4>Five Integrated Takeaways</h4>
+    <div class="item"><p><b>The moat is brand, not discovery.</b> #1 on the brand term; branded ≈ 53% of visits; ranked keywords −69% in two years. Organic top-of-funnel leverage is eroding — consistent with margin compression, not collapse.</p></div>
+    <div class="item"><p><b>Category economics favor scaled, consolidated players.</b> JAB/“Doubtless” owns 20+ brands and 6M+ pets; Nationwide’s petinsurance.com and petsbest.com hold 1.6–2.7× Fetch’s organic traffic value; Fetch defends only 63–97 paid keywords vs MetLife’s 236 and ASPCA’s 219.</p></div>
+    <div class="item"><p><b>The AI answer layer is the open — and cheap — flank.</b> 0.05% share of AI answers, absent on 24.7K AI-Overview keywords, while AI referrals are still ~1% of web traffic (but convert at 7.1%, near paid search). A Dodo-grade content engine could pre-empt positions before they harden.</p></div>
+    <div class="item"><p><b>Third parties already own the narrative.</b> reddit.com (187 mentions) and pawlicy.com (99) are the top cited sources in AI answers touching Fetch — measurable aggregator dependence that feeds directly into price-transparency risk on new-customer acquisition.</p></div>
+    <div class="item"><p><b>“Cheap can’t stay cheap” is the strongest mitigant.</b> CA approved 14% (Lemonade), 45% (Pets Best/APIC), 56% (MetLife/Embrace); Nationwide non-renewed ~100K policies; ManyPets exited the US. Loss-ratio convergence narrows the price gap to Fetch over time.</p></div>
+  </div>
+</section>
+
+<!-- ══════════════ MARKET ══════════════ -->
+<section class="tab" id="market">
+  <h3 class="sec">A real market, <em>with the crown jewel already taken</em></h3>
+  <p class="sub">NAPHIA 2026 SOI (via WTW) · public filings &amp; deal reporting · treat forecasts as scenarios, not base cases</p>
+
+  <div class="grid g3">
+    <div class="kpi"><div class="lbl">US GWP</div><div class="val">$5.2B<small class="up">+20.8%</small></div><div class="note">2025 · but premium growing faster than pet count (~9%) — much of the “growth” is rate</div></div>
+    <div class="kpi"><div class="lbl">Insured Pets (N. America)</div><div class="val">7.6M</div><div class="note">US claims paid $3.07B (+23.6%) · cats fastest-growing segment</div></div>
+    <div class="kpi"><div class="lbl">Industry Renewal Retention</div><div class="val">~87–89%</div><div class="note">Top programs 92%+ · fragile under a repricing spiral</div></div>
+  </div>
+
+  <div class="grid g2">
+    <div class="card">
+      <h4>Penetration Runway — Real, But Capped</h4>
+      <div class="chartbox"><canvas id="penChart"></canvas></div>
+      <div class="read"><b>Read:</b> The UK/Sweden bull comparables overstate the ceiling — those markets matured over decades with different vet-payment structures. Realistic US ceiling over a hold: high-single to low-double digits. Any thesis must price a scenario where penetration plateaus below 8% (self-insurance is the default for ~95% of pets; Mars/JAB wellness memberships compete for the same wallet).</div>
+    </div>
+    <div class="card">
+      <h4>Vet Inflation — The Master Variable</h4>
+      <div class="chartbox"><canvas id="cpiChart"></canvas></div>
+      <div class="read"><b>Read:</b> Vet-services CPI has run ~2–3× general inflation every year since 2022 (+55.5% cumulative since 2019). This drives both premium hikes and loss-ratio pressure — and demand is now responding: vet visits fell 3.1% in 2025, the fourth straight annual decline (Vetsource). Price sensitivity is emerging on the demand side too.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h4>Ownership &amp; Control Map — Who Actually Owns This Category</h4>
+    <table>
+      <tr><th>Owner</th><th>Assets</th><th>Scale</th><th>Strategic Posture</th></tr>
+      <tr><td><b>JAB Holding</b> (“Doubtless,” rebranded Jun ’26)</td><td>20+ brands: ASPCA, Spot, Figo, Pumpkin, Embrace, Pets Best (u/w), AKC, Crum &amp; Forster/Pethealth + NVA (1,000+ vet hospitals)</td><td>6M+ pets · $3B+ global rev · US premiums +79.9% YoY</td><td>The consolidator. Not buyable — it is the acquirer. Vertical integration of carrier + provider.</td></tr>
+      <tr class="hl"><td><b>Warburg Pincus</b></td><td><b>Fetch</b> (ex-Petplan, acquired 2019 at ~$130M rev; rebranded 2021) · The Dodo minority stake + licensing</td><td>~550K pets · ~340 employees · AXIS-underwritten</td><td>PE-owned asset that could transact. Top-5 US brand by prominence (GM Insights).</td></tr>
+      <tr><td><b>Trupanion</b> (public)</td><td>~1.1M subscription pets · direct-pay software in ~4,200 clinics, ~200 Territory Partners</td><td>$1.44B rev FY25 · first GAAP profit $19.4M · ~98.35% monthly retention</td><td>Vet-channel moat Fetch lacks; largely insulated from AI/aggregator disintermediation — sold at point of care.</td></tr>
+      <tr><td><b>Chubb</b></td><td>Healthy Paws (from Aon, May ’24, ~$300M ≈ 0.9× premium)</td><td>~$331M premium (2023)</td><td>Strategic carrier building specialty.</td></tr>
+      <tr><td><b>Mars</b></td><td>Banfield / VCA / BluePearl (2,000+ practices) · Optimum Wellness / CareClub from $19.99/mo</td><td>—</td><td>The underappreciated substitute threat: clinic-locked wellness memberships that cap insurance penetration.</td></tr>
+      <tr><td><b>MetLife / Nationwide</b></td><td>Employer / voluntary-benefits leaders (~70% of Nationwide’s book is group)</td><td>—</td><td>Nationwide shedding unprofitable policies (~100K non-renewed).</td></tr>
+    </table>
+    <div class="flag"><b>Structural implication:</b> ownership concentration dampens destructive price wars — many nominal “competitors” share a JAB parent with no interest in a race to the bottom. This is a rational oligopoly, and it partially protects Fetch’s premium. But it also means Fetch is <b>out-published and out-distributed, not out-branded</b>.</div>
+  </div>
+
+  <div class="card">
+    <h4>Deal &amp; Multiple Environment — The Arbitrage</h4>
+    <div class="chartbox"><canvas id="multChart"></canvas></div>
+    <div class="read"><b>Read:</b> Buy sub-scale MGA/distribution at ~9–12× EBITDA, build to platform scale, exit at 16–18× to strategics (MetLife, Chubb, Nationwide), distribution consolidators (Acrisure/Hub) or a JAB capital event — but only if organic growth and retention are real. Confirmed comps: JAB-Fairfax $1.4B (largest); Chubb–Healthy Paws ~$300M at ~0.9× premium (low, traditional book); Figo ~$250M at ~7× premium (high, insurtech premium). A Thrasio-style debt-fueled DTC brand roll-up is explicitly <b>not recommended</b> — it replicates the aggregator failure pattern (CAC inflation, thin unit economics, capacity dependence).</div>
+  </div>
+</section>
+
+<!-- ══════════════ PRICE ══════════════ -->
+<section class="tab" id="price">
+  <h3 class="sec">Premium tier, <em>justified by the broadest benefit set</em></h3>
+  <p class="sub">Apples-to-apples avg monthly premiums (medium mixed-breed dog / DSH cat, ~$5K–unlimited, $250 ded., 80–90%) · Compare.com, Forbes, U.S. News, Pawlicy — directional tiers, not precise quotes</p>
+
+  <div class="grid g2">
+    <div class="card">
+      <h4>Avg Monthly Premium — Dog ($/mo)</h4>
+      <div class="chartbox tall"><canvas id="priceBar"></canvas></div>
+      <div class="legendline">Dashed lines: U.S. News industry avg $81.76 · Pawlicy median $62.44. Fetch quotes range $79.62 (U.S. News) – $91 (Forbes); Pawlicy real-customer data $52.21 (below its dog average — plan-design dependent).</div>
+    </div>
+    <div class="card">
+      <h4>Positioning Map — Price vs Coverage Breadth</h4>
+      <div class="chartbox tall"><canvas id="posMap"></canvas></div>
+      <div class="legendline">Coverage breadth is a qualitative 0–10 index from plan-structure analysis. Fetch sits top-right: highest price, widest included benefit set. Nearest neighbors: Pumpkin (JAB sister-priced) and Trupanion (defends premium via vet-channel direct-pay moat Fetch lacks).</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h4>Tier Summary</h4>
+    <table>
+      <tr><th>Tier</th><th>Brands</th><th>Dog $/mo (directional)</th><th>Structural note</th></tr>
+      <tr><td><span class="pill prem">Premium</span></td><td>Fetch, Trupanion, Pumpkin</td><td class="num">$70–91</td><td>Coverage breadth or channel moat justifies the spread</td></tr>
+      <tr><td><span class="pill mid">Mid</span></td><td>Healthy Paws, Embrace, ASPCA, MetLife</td><td class="num">$50–60</td><td>Rate action running hardest here (CA 45–56% approvals)</td></tr>
+      <tr><td><span class="pill val">Value</span></td><td>Lemonade, Spot, Pets Best</td><td class="num">$27–47</td><td>Younger books, rate inadequacy — the gap should narrow</td></tr>
+    </table>
+  </div>
+
+  <div class="cols" style="margin-top:16px">
+    <div class="card" style="margin-top:0">
+      <h4>Why Fetch Is Priced Where It Is</h4>
+      <div class="body" style="font-size:14px">
+      Single comprehensive plan including what rivals charge extra for or exclude:
+      <ul style="margin:8px 0 0 18px">
+        <li><b>Curable pre-existing conditions</b> (symptom-free 12 months) — also offered by Pets Best, ASPCA, Pumpkin, Spot, MetLife, so a differentiator vs Trupanion/Healthy Paws but <i>not unique</i></li>
+        <li><b>Exam fees up to $250 included</b>; full dental for every adult tooth; behavioral therapy; telehealth</li>
+        <li>Deductibles ~$250–2,500; 70/80/90%; $5K/$10K/$15K/unlimited; no upper age cap; 6-month ortho wait waivable with baseline exam</li>
+        <li>The Dodo brand (100M-person US audience) + Walmart (10% first-year) and AARP/Hartford distribution</li>
+      </ul>
+      </div>
+    </div>
+    <div class="card" style="margin-top:0">
+      <h4>Complaint &amp; Rate-Increase Context</h4>
+      <div class="body" style="font-size:14px">
+        <ul style="margin:8px 0 0 18px">
+          <li>Dominant Fetch complaint theme: <b>renewal increases ~30–50% as pets age</b> + pre-existing denials — a category-wide pattern, not Fetch-specific</li>
+          <li>NAIC complaints attach to the underwriter (XL Specialty #37885 / AXIS #37273), not the brand; policies filed as “inland marine” — complicates comparison</li>
+          <li>NAIC added pet insurance as an MCAS line for 2024 data — standardized complaint indices are only now emerging: <b>pull directly in diligence</b></li>
+          <li>NAIC Model Act now in 16+ jurisdictions (FL HB 655 eff. Jan 2026): compliance cost rises (favors scale), but regulators are approving 26–45% hikes — not a rate-suppression regime</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="read"><b>Read:</b> Fetch competes on coverage breadth, not price — exposed on new-customer acquisition when aggregators/AI make side-by-side comparison frictionless (80% of Chewy survey respondents cite cost as top concern), but protected on renewals by switching costs. Cheap rivals’ pricing partly reflects younger books and rate inadequacy that must correct — CA’s 14–56% approved hikes are the proof.</div>
+</section>
+
+<!-- ══════════════ SEARCH ══════════════ -->
+<section class="tab" id="search">
+  <h3 class="sec">A shrinking footprint, <em>carrying resilient demand</em></h3>
+  <p class="sub">Semrush Organic Rankings (US desktop, 22 Jul 2026) · SE Ranking Competitive Research (US organic, Jul 2026) · trend values are approximate chart reads · tool models differ (Semrush 86.9K vs SE Ranking 49.6K/mo)</p>
+
+  <div class="grid g2">
+    <div class="card">
+      <h4>US Organic Keywords Ranked (Indexed, Aug ’24 = 100)</h4>
+      <div class="chartbox"><canvas id="kwTrend"></canvas></div>
+      <div class="read"><b>Read:</b> −69% in two years, yet traffic holds (+3.7%) and value is at a two-year high (+18.8%). Rankings are consolidating onto branded and high-intent terms — resilient today, but it thins the top-of-funnel that feeds tomorrow’s non-branded growth (currently 40.5K visits, +7.4%, the share worth compounding).</div>
+    </div>
+    <div class="card">
+      <h4>Organic Traffic Value, $K/mo (SE Ranking)</h4>
+      <div class="chartbox"><canvas id="tvTrend"></canvas></div>
+      <div class="read"><b>Read:</b> Jul ’26 ≈ $296K ≈ 2.2× Jul ’25 — fewer, more commercial rankings. But the insurer set still out-monetizes: petinsurance.com $794K and petsbest.com $466K hold 1.6–2.7× Fetch’s value; content players monetize a fraction despite equal or larger audiences.</div>
+    </div>
+  </div>
+
+  <div class="grid g2">
+    <div class="card">
+      <h4>Competitive Map — Publishers for Attention, Insurers for Value</h4>
+      <div class="chartbox tall"><canvas id="bubble"></canvas></div>
+      <div class="legendline">Bubble area ∝ organic traffic value ($K/mo). Gold = insurers; green = content/adjacent pet players. gsvs.org spiked to ~245K traffic in early ’26 before fading to 137K — content volatility, not structural loss for Fetch.</div>
+    </div>
+    <div class="card">
+      <h4>Keyword Gap — Overlap vs Absence, per Rival (K)</h4>
+      <div class="chartbox tall"><canvas id="gapChart"></canvas></div>
+      <div class="legendline">≤8K terms overlap with any single rival; 47–85K keywords per rival where Fetch is absent entirely — the addressable content gap. Fetch’s total footprint 47.7K vs the set’s 52.6–92.2K.</div>
+    </div>
+  </div>
+
+  <div class="grid g2">
+    <div class="card">
+      <h4>Insurance Peer Set — Keyword Base (Worldwide, K)</h4>
+      <div class="chartbox"><canvas id="peerChart"></canvas></div>
+      <div class="read"><b>Read:</b> Embrace, MetLife and Trupanion carry 1.4–2.0× Fetch’s base; overlap with Fetch is only 8–14% — peers win on breadth, not head-to-head. Several overlap leaders sit inside consolidated ownership (JAB, Nationwide): Fetch is out-published by scaled content operations, not out-branded.</div>
+    </div>
+    <div class="card">
+      <h4>Demand Mix — 4% of Keywords Deliver Half the Traffic</h4>
+      <div class="chartbox"><canvas id="intentChart"></canvas></div>
+      <table style="margin-top:14px">
+        <tr><th>Top Keyword</th><th>Pos.</th><th>Volume</th><th>Traffic Share</th></tr>
+        <tr class="hl"><td>fetch pet insurance</td><td class="num">#1</td><td class="num">40.5K</td><td class="num">37.3%</td></tr>
+        <tr><td>fetch insurance</td><td class="num">#1</td><td class="num">2.9K</td><td class="num">2.7%</td></tr>
+        <tr><td>fetch pet</td><td class="num">#1</td><td class="num">2.4K</td><td class="num">2.2%</td></tr>
+        <tr><td><i>dog insurance</i> (only non-brand head term)</td><td class="num">#6</td><td class="num">49.5K</td><td class="num">1.9%</td></tr>
+        <tr><td>petplan (legacy brand)</td><td class="num">#1</td><td class="num">1.6K</td><td class="num">1.5%</td></tr>
+      </table>
+      <div class="flag" style="margin-top:12px"><b>Paid defense is thin:</b> 63–97 paid keywords, mostly defending the brand term at ~$5.61 CPC — vs MetLife 236, ASPCA 219, Figo 73. A thin flank in a JAB-consolidated field.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ AI ══════════════ -->
+<section class="tab" id="ai">
+  <h3 class="sec">0.05% of AI answers — <em>the open flank</em></h3>
+  <p class="sub">Semrush AI visibility (23 Jul 2026) · SE Ranking AI Search topic shares (Apr–Jul 2026) · Conductor / Similarweb referral context</p>
+
+  <div class="grid g3">
+    <div class="kpi"><div class="lbl">Share of AI Answers</div><div class="val dn">0.05% ↓</div><div class="note">AI Visibility score 30 · trending down</div></div>
+    <div class="kpi"><div class="lbl">Mentions / Cited Pages</div><div class="val">835 / 1.7K</div><div class="note">Cited on 1.8K AIO keywords — omitted on 24.7K where AIOs appear</div></div>
+    <div class="kpi"><div class="lbl">AI Referral Context</div><div class="val">~1%<small>of web traffic</small></div><div class="note">Financials ~0.48% · but ChatGPT referrals convert at 7.1% (vs paid search 7.8%)</div></div>
+  </div>
+
+  <div class="grid g2">
+    <div class="card">
+      <h4>Mentions by Engine</h4>
+      <div class="chartbox"><canvas id="engineChart"></canvas></div>
+      <div class="legendline">AI Overviews dominate (435 mentions, 1.4K pages cited); ChatGPT trails at 85 — notable given ChatGPT carries ~87% of AI-referral traffic and insurance shopping is beginning to move there (Experian’s auto app compares 37+ carriers).</div>
+    </div>
+    <div class="card">
+      <h4>Share of AI Answers by Topic — Fetch vs SERP Rivals</h4>
+      <table class="heat" id="heatTable">
+        <tr><th style="text-align:left">Topic</th><th>Fetch</th><th>gsvs.org</th><th>Petcube</th><th>PetLab</th><th>Canna-Pet</th><th>Vets Now</th></tr>
+      </table>
+      <div class="legendline">Fetch leads only on “pet medical insurance plans” (3.07%). gsvs.org owns dog-health topics at up to 15% — pet-education publishers, not insurers, own the care questions that seed insurance intent.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h4>Top Cited Sources on Fetch-Related AI Queries</h4>
+    <div class="chartbox"><canvas id="sourceChart"></canvas></div>
+    <div class="legendline">Review and aggregator domains outweigh owned properties in the answer layer — the measurable form of narrative dependence.</div>
+  </div>
+
+  <div class="flag"><b>Third parties shape the answer:</b> reddit.com (187 mentions) and pawlicy.com (99) are the top cited sources on Fetch-related AI queries — a measurable review/aggregator dependence that feeds directly into the price-transparency risk. On premium pricing 40–60% above value players, losing narrative control on the comparison layer is the mechanism by which margin compression arrives.</div>
+  <div class="flag g"><b>The mitigant Fetch already owns:</b> LLMs preferentially cite authoritative, high-content brands. The Dodo engine (100M-person US audience) is precisely the brand/content asset AI answers surface — a 3–7 year CAC risk that a Dodo-grade structured-content program could pre-empt <i>now, before positions harden</i>. This is the cheapest strategic option in the deck.</div>
+</section>
+
+<!-- ══════════════ THESIS ══════════════ -->
+<section class="tab" id="thesis">
+  <h3 class="sec">The disintermediation thesis — <em>bull, bear &amp; verdict</em></h3>
+  <p class="sub">Synthesized from the risk assessment, cross-validated against the search/AI benchmark and market deck</p>
+
+  <div class="cols">
+    <div>
+      <details open><summary style="color:var(--red)">BEAR CASE — the thesis is right</summary><div class="body"><ul>
+        <li><b>Price transparency commoditizes.</b> AI assistants + aggregators (Pawlicy, Policygenius, Compare.com) make side-by-side frictionless; Fetch’s rich-plan quotes ($79–91/mo dog) are visibly high vs $27–44 value leaders.</li>
+        <li><b>Affordability is the #1 barrier.</b> 80% of Chewy respondents cite cost; 52% of owners skipped needed vet care last year, 71% citing cost.</li>
+        <li><b>CAC inflation.</b> If AI answers disintermediate Google search, brands lose the shortlist — and AI-referred leads convert higher <i>only for entities the models cite</i>. Fetch is cited at 0.05%.</li>
+        <li><b>UK precedent.</b> Comparison sites dominate the higher-penetration UK market and let users filter for the cheapest premiums — a plausible template for a maturing US market.</li>
+        <li><b>Benchmark corroboration:</b> shrinking keyword footprint (−69%), thin paid defense (63–97 terms), third parties owning the AI narrative.</li>
+      </ul></div></details>
+
+      <details><summary style="color:var(--red)">What would prove the bear right</summary><div class="body"><ul>
+        <li>Non-branded organic traffic turns negative for two consecutive quarters</li>
+        <li>Aggregator- or AI-sourced share of new policies passes ~20% of gross adds</li>
+        <li>Blended CAC rises faster than ARPU for four straight quarters</li>
+        <li>Renewal retention breaks below ~85% while rate action continues</li>
+      </ul></div></details>
+    </div>
+
+    <div>
+      <details open><summary style="color:var(--green)">BULL CASE — the thesis is overstated</summary><div class="body"><ul>
+        <li><b>Switching costs are the real moat.</b> Anything treated at Fetch becomes pre-existing elsewhere — the ~550K-pet book cannot shop on price without losing coverage. This is a structural lock the auto/home analogy does not have.</li>
+        <li><b>Cheap can’t stay cheap.</b> CA approved 14% (Lemonade), 45% (Pets Best/APIC), 56% (MetLife/Embrace); Nationwide non-renewed ~100K policies; ManyPets exited the US. Loss-ratio convergence compresses the price gap toward Fetch.</li>
+        <li><b>Consolidated ownership dampens price war.</b> Many nominal rivals share a JAB parent with no interest in a race to the bottom — a rational oligopoly, not a commodity auction.</li>
+        <li><b>Comparison is not truly apples-to-apples.</b> Exam fees, dental, behavioral, curable pre-existing and payout caps differ enough that a price-only ranking misprices the product — and regulators are pushing disclosure, not price-matching.</li>
+        <li><b>AI referrals are still ~1% of web traffic</b> (financials ~0.48%). The risk is a 3–7 year horizon, not a next-12-months shock — long enough to build the content position.</li>
+        <li><b>Fetch owns the asset AI answers reward.</b> The Dodo (100M-person US audience) is exactly the authoritative-content property LLMs preferentially cite.</li>
+      </ul></div></details>
+
+      <details><summary style="color:var(--green)">What would prove the bull right</summary><div class="body"><ul>
+        <li>Value-tier rate filings continue at 25%+ and the premium gap to Fetch narrows below ~25%</li>
+        <li>Renewal retention holds at 87%+ through two full repricing cycles</li>
+        <li>A structured-content program lifts AI answer share from 0.05% toward peer levels within 12–18 months</li>
+        <li>Vet-channel or employer-benefits distribution adds a non-search acquisition path</li>
+      </ul></div></details>
+    </div>
+  </div>
+
+  <div class="card">
+    <h4>Scenario Frame — 5-Year Outcomes</h4>
+    <table>
+      <tr><th>Scenario</th><th>Prob.</th><th>Mechanism</th><th>Implication for Fetch</th></tr>
+      <tr><td><b>Margin compression</b> (base)</td><td class="num">55%</td><td>Price transparency raises new-customer CAC; book retention holds</td><td>Growth slows, unit economics thin — value still real, entry price must reflect it</td></tr>
+      <tr><td><b>Premium defended</b> (bull)</td><td class="num">25%</td><td>Value-tier rate correction + content/AI position rebuilt</td><td>Premium spread narrows in Fetch’s favor; brand moat compounds</td></tr>
+      <tr><td><b>True disintermediation</b> (bear)</td><td class="num">20%</td><td>Aggregator/AI layer becomes the default shopping surface</td><td>Brand equity decays into a commodity quote; exit multiple compresses</td></tr>
+    </table>
+    <div class="legendline">Probabilities are CreditSwan.AI’s analyst judgment, not a model output — stated to force explicit disagreement in committee.</div>
+  </div>
+
+  <div class="verdict">
+    <h4>Verdict</h4>
+    <p>The strong form of the disintermediation thesis — that AI and aggregators commoditize pet insurance and strand premium brands — is <b>not supported</b> by the evidence. Pre-existing-condition switching costs, vet inflation forcing value players to reprice, and consolidated ownership that has no appetite for a price war all cut against it. Fetch’s in-force book is far more defensible than the thesis assumes.</p>
+    <p>The weak form is <b>correct and material</b>. Fetch’s discovery position is eroding on every measurable axis — keyword footprint down ~69%, paid defense at 63–97 terms, AI answer share at 0.05% with reddit and pawlicy shaping the narrative. That does not kill the franchise; it makes each new customer more expensive over a 3–7 year horizon and squeezes a brand already priced 40–60% above the value tier.</p>
+    <p>Position accordingly: <b>underwrite to margin compression, not collapse</b>; price entry off retention and non-branded growth rather than headline GWP; and favor <b>asset-light distribution and administration</b> over carrying inflation-exposed underwriting risk.</p>
+  </div>
+</section>
+
+<!-- ══════════════ ACTION ══════════════ -->
+<section class="tab" id="action">
+  <h3 class="sec">What we do next — <em>diligence, value creation &amp; triggers</em></h3>
+  <p class="sub">Sequenced for a control-buyout process · owners and timing to be assigned at IC</p>
+
+  <div class="card">
+    <h4>Priority Diligence Requests — The Questions That Move The Verdict</h4>
+    <table>
+      <tr><th>#</th><th>Request</th><th>Why it matters</th><th>Source</th></tr>
+      <tr class="hl"><td class="num">1</td><td>Cohort retention by policy age and by rate-increase band</td><td>The entire bull case rests on switching costs holding through repricing</td><td>Management data room</td></tr>
+      <tr><td class="num">2</td><td>Blended CAC by channel, 12-quarter series, incl. aggregator-sourced</td><td>Direct test of the margin-compression mechanism</td><td>Management / marketing systems</td></tr>
+      <tr><td class="num">3</td><td>Loss ratio by cohort year and by species; reserve adequacy</td><td>Determines whether current rate action is catch-up or ongoing</td><td>Actuarial / AXIS</td></tr>
+      <tr><td class="num">4</td><td>AXIS underwriting agreement — term, economics, change-of-control</td><td>Capacity dependence is the single largest structural risk in an MGA-shaped asset</td><td>Legal</td></tr>
+      <tr><td class="num">5</td><td>The Dodo licensing terms — duration, exclusivity, cost, renewal</td><td>The cheapest strategic asset in the deck may not be permanent</td><td>Legal / Warburg</td></tr>
+      <tr><td class="num">6</td><td>NAIC MCAS complaint indices (2024 data year), by underwriter</td><td>First standardized comparison the category has ever had</td><td>NAIC direct pull</td></tr>
+      <tr><td class="num">7</td><td>Non-branded organic and paid conversion by keyword cluster</td><td>Separates real demand growth from brand-term harvesting</td><td>Management analytics</td></tr>
+      <tr><td class="num">8</td><td>Walmart / AARP-Hartford partnership economics and renewal dates</td><td>Non-search distribution is the hedge against the AI risk</td><td>Legal / commercial</td></tr>
+    </table>
+  </div>
+
+  <div class="grid g2">
+    <div class="card">
+      <h4>Value-Creation Levers — Ranked by Cost-to-Impact</h4>
+      <div class="chartbox tall"><canvas id="leverChart"></canvas></div>
+      <div class="legendline">Bubble position: implementation cost (x) vs expected EBITDA impact over hold (y). The structured-content / AI-answer program sits lowest-cost, mid-impact — the clearest early move.</div>
+    </div>
+    <div class="card">
+      <h4>The First Hundred Days</h4>
+      <div class="body" style="font-size:14px">
+        <ul style="margin:8px 0 0 18px">
+          <li><b>Claim the answer layer.</b> Structured, citable content across the 24.7K AI-Overview keywords where Fetch is absent — leveraging Dodo authority. Lowest cost, longest-dated payoff.</li>
+          <li><b>Widen paid defense.</b> 63–97 terms is a thin flank against MetLife’s 236 and ASPCA’s 219; brand-term defense alone is not a strategy in a JAB-consolidated field.</li>
+          <li><b>Build a non-search acquisition path.</b> Vet channel or employer/voluntary benefits — the two routes structurally insulated from price-transparency risk.</li>
+          <li><b>Re-engineer the renewal experience.</b> The 30–50% age-based increase is the category’s dominant complaint and the single largest retention risk under repricing.</li>
+          <li><b>Segment the plan ladder.</b> A defensible entry tier that competes at the comparison layer without cannibalizing the comprehensive plan’s economics.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h4>Monitoring Triggers — Reassess The Thesis When</h4>
+    <table>
+      <tr><th>Metric</th><th>Current</th><th>Watch Level</th><th>Action</th></tr>
+      <tr><td>Non-branded organic traffic</td><td class="num">40.5K/mo (+7.4%)</td><td class="num">Two negative quarters</td><td>Re-underwrite CAC assumptions</td></tr>
+      <tr><td>AI answer share</td><td class="num">0.05% ↓</td><td class="num">Below 0.03% or peers above 1%</td><td>Escalate content program spend</td></tr>
+      <tr><td>Renewal retention</td><td class="num">~87–89% (industry)</td><td class="num">&lt; 85%</td><td>Switching-cost moat is failing — bear case live</td></tr>
+      <tr><td>Premium gap to value tier</td><td class="num">40–60%</td><td class="num">&lt; 25% (narrowing)</td><td>Bull case confirming — revisit growth plan</td></tr>
+      <tr><td>Paid keyword defense</td><td class="num">63–97 terms</td><td class="num">Rival brand-term bidding appears</td><td>Immediate defensive spend</td></tr>
+      <tr><td>Vet-services CPI</td><td class="num">~5.6–6.4%</td><td class="num">Sustained &gt; 7%</td><td>Loss-ratio and affordability stress — reprice model</td></tr>
+    </table>
+  </div>
+
+  <div class="verdict">
+    <h4>Recommendation</h4>
+    <p><b>Category: conditional GO, narrow.</b> Pursue asset-light distribution and administration — MGA/TPA, employer benefits, vet channel — at ~9–12× EBITDA with a path to platform scale. Do not carry inflation-exposed underwriting risk, and do not replicate a debt-fueled DTC brand roll-up.</p>
+    <p><b>Fetch specifically: proceed to confirmatory diligence</b> on the eight requests above, underwriting to the margin-compression base case at 55% probability. The asset is more defensible than the disintermediation thesis claims and less defensible than its brand position suggests. Price it in the middle, and buy the retention data before buying the brand.</p>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  Originated and prepared by <b style="color:var(--ink)">CREDITSWAN.AI</b> · Diligence Intelligence Packet · July 2026 · Confidential working document — not investment advice and not for external distribution.<br>
+  Sources: Semrush (22–23 Jul 2026), SE Ranking (Jul 2026), NAPHIA 2026 State of the Industry via WTW, BLS CPI, public filings and deal reporting, Compare.com / Forbes / U.S. News / Pawlicy premium surveys. Chart series are directional reconstructions of the underlying pulls; verify against source exports before committee use.
+</footer>
+
+<script>
+(function(){
+  var ink='#0f1b2d', gold='#2e7d8f', goldLt='#93bcc6', red='#b0413a', green='#3f6e4e', muted='#6f6a60', line='#dcd6ca';
+
+  if (window.Chart) {
+    Chart.defaults.font.family = "'Helvetica Neue', Arial, sans-serif";
+    Chart.defaults.font.size = 11;
+    Chart.defaults.color = muted;
+  }
+
+  var grid = { grid:{ color:line, drawBorder:false }, ticks:{ color:muted } };
+  function opts(extra){
+    var base = {
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{ labels:{ color:ink, boxWidth:12, font:{size:11} } } },
+      scales:{ x:JSON.parse(JSON.stringify(grid)), y:JSON.parse(JSON.stringify(grid)) }
+    };
+    return Object.assign(base, extra||{});
+  }
+
+  var charts = {};
+  var built = {};
+
+  function build(id, cfg){ charts[id] = cfg; }
+
+  // ── Market ───────────────────────────────────────────────
+  build('penChart', function(ctx){
+    return new Chart(ctx,{ type:'bar',
+      data:{ labels:['US total','US dogs','US cats','Canada','UK','Sweden'],
+        datasets:[{ label:'Pet insurance penetration (%)',
+          data:[4.27,5.99,2.29,4.4,25,40],
+          backgroundColor:['#0f1b2d',goldLt,goldLt,'#cdd6db',gold,gold] }] },
+      options:opts({ plugins:{legend:{display:false}}, scales:{ x:grid, y:Object.assign({beginAtZero:true, title:{display:true,text:'% of pets insured',color:muted}}, grid) } })
+    });
+  });
+
+  build('cpiChart', function(ctx){
+    return new Chart(ctx,{ type:'line',
+      data:{ labels:['2019','2020','2021','2022','2023','2024','2025'],
+        datasets:[
+          { label:'Vet services CPI (YoY %)', data:[2.8,3.4,4.0,10.1,9.2,7.6,6.0], borderColor:red, backgroundColor:'rgba(176,65,58,.12)', tension:.3, fill:true, pointRadius:3 },
+          { label:'All-items CPI (YoY %)', data:[1.8,1.2,4.7,8.0,4.1,2.9,2.8], borderColor:ink, borderDash:[5,4], tension:.3, pointRadius:3 }
+        ] },
+      options:opts({ scales:{ x:grid, y:Object.assign({beginAtZero:true, title:{display:true,text:'YoY %',color:muted}}, grid) } })
+    });
+  });
+
+  build('multChart', function(ctx){
+    return new Chart(ctx,{ type:'bar',
+      data:{ labels:['Sub-scale MGA / distribution (entry)','Platform-scale distribution (exit)','Traditional carrier book','Insurtech premium (Figo)'],
+        datasets:[
+          { label:'Low', data:[9,16,7,11], backgroundColor:goldLt },
+          { label:'High', data:[3,2,3,5], backgroundColor:ink }
+        ] },
+      options:opts({ indexAxis:'y',
+        plugins:{ legend:{ labels:{color:ink,boxWidth:12} }, tooltip:{ callbacks:{ label:function(c){ return c.dataset.label+': '+(c.datasetIndex===0? c.parsed.x+'×' : '+'+c.parsed.x+'× (to '+(c.parsed.x+c.chart.data.datasets[0].data[c.dataIndex])+'×)'); } } } },
+        scales:{ x:Object.assign({stacked:true,beginAtZero:true,title:{display:true,text:'EV / EBITDA multiple (×)',color:muted}}, grid), y:Object.assign({stacked:true}, grid) } })
+    });
+  });
+
+  // ── Price ────────────────────────────────────────────────
+  var priceBrands = ['Lemonade','Pets Best','Spot','ASPCA','Figo','Embrace','Healthy Paws','MetLife','Pumpkin','Trupanion','Fetch'];
+  var priceVals   = [27,40,44,50,52,55,56,58,71,78,85];
+  build('priceBar', function(ctx){
+    return new Chart(ctx,{ type:'bar',
+      data:{ labels:priceBrands, datasets:[{ label:'Avg $/mo — dog',
+        data:priceVals,
+        backgroundColor:priceBrands.map(function(b){ return b==='Fetch'? ink : (['Pumpkin','Trupanion'].indexOf(b)>-1? gold : goldLt); }) }] },
+      options:opts({ indexAxis:'y', plugins:{legend:{display:false}},
+        scales:{ x:Object.assign({beginAtZero:true,title:{display:true,text:'$ per month',color:muted}}, grid), y:grid } })
+    });
+  });
+
+  build('posMap', function(ctx){
+    var pts = [
+      {n:'Lemonade',x:27,y:4.5},{n:'Pets Best',x:40,y:6.0},{n:'Spot',x:44,y:6.5},
+      {n:'ASPCA',x:50,y:6.5},{n:'Figo',x:52,y:6.8},{n:'Embrace',x:55,y:7.2},
+      {n:'Healthy Paws',x:56,y:5.5},{n:'MetLife',x:58,y:7.0},{n:'Pumpkin',x:71,y:8.0},
+      {n:'Trupanion',x:78,y:7.8},{n:'Fetch',x:85,y:9.2}
+    ];
+    return new Chart(ctx,{ type:'scatter',
+      data:{ datasets:[
+        { label:'Fetch', data:pts.filter(function(p){return p.n==='Fetch';}), backgroundColor:ink, pointRadius:11 },
+        { label:'Peers', data:pts.filter(function(p){return p.n!=='Fetch';}), backgroundColor:goldLt, pointRadius:8 }
+      ] },
+      options:opts({
+        plugins:{ legend:{labels:{color:ink,boxWidth:12}}, tooltip:{ callbacks:{ label:function(c){ return c.raw.n+': $'+c.raw.x+'/mo · breadth '+c.raw.y; } } } },
+        scales:{ x:Object.assign({title:{display:true,text:'Avg monthly premium ($)',color:muted}}, grid),
+                 y:Object.assign({min:3,max:10,title:{display:true,text:'Coverage breadth index (0–10)',color:muted}}, grid) } })
+    });
+  });
+
+  // ── Search ───────────────────────────────────────────────
+  build('kwTrend', function(ctx){
+    return new Chart(ctx,{ type:'line',
+      data:{ labels:['Aug ’24','Nov ’24','Feb ’25','May ’25','Aug ’25','Nov ’25','Feb ’26','May ’26','Jul ’26'],
+        datasets:[{ label:'Ranked keywords (indexed)', data:[100,92,80,68,58,48,40,34,31],
+          borderColor:red, backgroundColor:'rgba(176,65,58,.12)', fill:true, tension:.3, pointRadius:3 }] },
+      options:opts({ plugins:{legend:{display:false}}, scales:{ x:grid, y:Object.assign({beginAtZero:true,title:{display:true,text:'Index (Aug ’24 = 100)',color:muted}}, grid) } })
+    });
+  });
+
+  build('tvTrend', function(ctx){
+    return new Chart(ctx,{ type:'line',
+      data:{ labels:['Jul ’25','Sep ’25','Nov ’25','Jan ’26','Mar ’26','May ’26','Jul ’26'],
+        datasets:[{ label:'Organic traffic value ($K/mo)', data:[135,142,160,185,215,258,296],
+          borderColor:green, backgroundColor:'rgba(63,110,78,.14)', fill:true, tension:.3, pointRadius:3 }] },
+      options:opts({ plugins:{legend:{display:false}}, scales:{ x:grid, y:Object.assign({beginAtZero:true,title:{display:true,text:'$K per month',color:muted}}, grid) } })
+    });
+  });
+
+  build('bubble', function(ctx){
+    var ins = [
+      {n:'petinsurance.com',x:210,y:92.2,r:28},
+      {n:'petsbest.com',x:150,y:74.0,r:22},
+      {n:'trupanion.com',x:120,y:80.5,r:17},
+      {n:'embracepetinsurance.com',x:105,y:88.0,r:15},
+      {n:'fetchpet.com',x:49.6,y:47.7,r:14}
+    ];
+    var content = [
+      {n:'gsvs.org',x:137,y:63.0,r:9},
+      {n:'petcube.com',x:88,y:52.6,r:7},
+      {n:'petlabco.com',x:96,y:58.0,r:8},
+      {n:'vets-now.com',x:72,y:55.0,r:6}
+    ];
+    return new Chart(ctx,{ type:'bubble',
+      data:{ datasets:[
+        { label:'Insurers', data:ins, backgroundColor:'rgba(46,125,143,.55)', borderColor:gold },
+        { label:'Content / adjacent', data:content, backgroundColor:'rgba(63,110,78,.45)', borderColor:green }
+      ] },
+      options:opts({
+        plugins:{ legend:{labels:{color:ink,boxWidth:12}}, tooltip:{ callbacks:{ label:function(c){ return c.raw.n+': '+c.raw.x+'K visits · '+c.raw.y+'K keywords'; } } } },
+        scales:{ x:Object.assign({beginAtZero:true,title:{display:true,text:'Organic traffic (K/mo)',color:muted}}, grid),
+                 y:Object.assign({beginAtZero:true,title:{display:true,text:'Keyword footprint (K)',color:muted}}, grid) } })
+    });
+  });
+
+  build('gapChart', function(ctx){
+    return new Chart(ctx,{ type:'bar',
+      data:{ labels:['petinsurance.com','embracepet…','trupanion.com','petsbest.com','gsvs.org','petcube.com'],
+        datasets:[
+          { label:'Overlap with Fetch (K)', data:[8.0,7.2,6.4,5.9,3.1,2.4], backgroundColor:ink },
+          { label:'Rival-only — Fetch absent (K)', data:[84.2,80.8,74.1,68.1,59.9,50.2], backgroundColor:goldLt }
+        ] },
+      options:opts({ scales:{ x:Object.assign({stacked:true}, grid), y:Object.assign({stacked:true,beginAtZero:true,title:{display:true,text:'Keywords (thousands)',color:muted}}, grid) } })
+    });
+  });
+
+  build('peerChart', function(ctx){
+    return new Chart(ctx,{ type:'bar',
+      data:{ labels:['Embrace','MetLife','Trupanion','Pets Best','ASPCA','Fetch'],
+        datasets:[{ label:'Keyword base (K, worldwide)', data:[95.4,88.1,80.5,74.0,66.3,47.7],
+          backgroundColor:['#93bcc6','#93bcc6','#93bcc6','#93bcc6','#93bcc6','#0f1b2d'] }] },
+      options:opts({ plugins:{legend:{display:false}}, scales:{ x:grid, y:Object.assign({beginAtZero:true,title:{display:true,text:'Keywords (thousands)',color:muted}}, grid) } })
+    });
+  });
+
+  build('intentChart', function(ctx){
+    return new Chart(ctx,{ type:'doughnut',
+      data:{ labels:['Brand terms (#1 positions)','Non-branded high-intent','Informational long tail'],
+        datasets:[{ data:[53,19,28], backgroundColor:[ink,gold,'#cdd6db'], borderColor:'#fdfcf8', borderWidth:2 }] },
+      options:{ responsive:true, maintainAspectRatio:false, cutout:'58%',
+        plugins:{ legend:{ position:'bottom', labels:{color:ink,boxWidth:12} },
+          tooltip:{ callbacks:{ label:function(c){ return c.label+': '+c.parsed+'% of organic traffic'; } } } } }
+    });
+  });
+
+  // ── AI ───────────────────────────────────────────────────
+  build('engineChart', function(ctx){
+    return new Chart(ctx,{ type:'bar',
+      data:{ labels:['AI Overviews','Google AI Mode','Perplexity','ChatGPT','Gemini'],
+        datasets:[{ label:'Mentions', data:[435,155,120,85,40],
+          backgroundColor:[ink,gold,goldLt,red,'#cdd6db'] }] },
+      options:opts({ indexAxis:'y', plugins:{legend:{display:false}},
+        scales:{ x:Object.assign({beginAtZero:true,title:{display:true,text:'Mentions (835 total)',color:muted}}, grid), y:grid } })
+    });
+  });
+
+  build('sourceChart', function(ctx){
+    return new Chart(ctx,{ type:'bar',
+      data:{ labels:['reddit.com','pawlicy.com','fetchpet.com','forbes.com','usnews.com','nerdwallet.com','thedodo.com'],
+        datasets:[{ label:'Citations in Fetch-related AI answers', data:[187,99,74,61,48,37,22],
+          backgroundColor:['#b0413a','#b0413a','#0f1b2d','#93bcc6','#93bcc6','#93bcc6','#3f6e4e'] }] },
+      options:opts({ plugins:{legend:{display:false}}, scales:{ x:grid, y:Object.assign({beginAtZero:true,title:{display:true,text:'Citations',color:muted}}, grid) } })
+    });
+  });
+
+  // ── Action ───────────────────────────────────────────────
+  build('leverChart', function(ctx){
+    var pts=[
+      {n:'AI / structured-content program',x:1.5,y:5.5,r:14},
+      {n:'Widen paid keyword defense',x:3.0,y:4.0,r:11},
+      {n:'Renewal experience redesign',x:3.5,y:7.0,r:16},
+      {n:'Entry-tier plan ladder',x:5.0,y:6.0,r:13},
+      {n:'Vet-channel build',x:8.5,y:8.5,r:18},
+      {n:'Employer / voluntary benefits',x:7.0,y:7.5,r:15}
+    ];
+    return new Chart(ctx,{ type:'bubble',
+      data:{ datasets:[{ label:'Value-creation levers', data:pts, backgroundColor:'rgba(46,125,143,.5)', borderColor:gold }] },
+      options:opts({
+        plugins:{ legend:{display:false}, tooltip:{ callbacks:{ label:function(c){ return c.raw.n+' — cost '+c.raw.x+'/10, impact '+c.raw.y+'/10'; } } } },
+        scales:{ x:Object.assign({min:0,max:10,title:{display:true,text:'Implementation cost / difficulty →',color:muted}}, grid),
+                 y:Object.assign({min:0,max:10,title:{display:true,text:'Expected EBITDA impact →',color:muted}}, grid) } })
+    });
+  });
+
+  // ── Heat table ───────────────────────────────────────────
+  var heatRows = [
+    ['pet medical insurance plans', 3.07, 1.10, 0.42, 0.18, 0.09, 0.31],
+    ['best pet insurance', 1.42, 2.85, 0.55, 0.21, 0.12, 0.44],
+    ['dog insurance cost', 0.96, 6.40, 0.38, 0.44, 0.18, 1.02],
+    ['pre-existing conditions pets', 0.61, 8.90, 0.22, 0.35, 0.55, 2.10],
+    ['dog health symptoms', 0.08, 15.00, 1.85, 3.20, 1.40, 4.60],
+    ['cat health &amp; care', 0.05, 12.30, 2.40, 2.10, 0.95, 3.80]
+  ];
+  function heatColor(v){
+    var t = Math.min(v/15,1);
+    return 'rgba(46,125,143,'+(0.08+t*0.72).toFixed(3)+')';
+  }
+  var tbl = document.getElementById('heatTable');
+  if (tbl){
+    heatRows.forEach(function(r){
+      var tr = document.createElement('tr');
+      var td0 = document.createElement('td');
+      td0.style.textAlign='left'; td0.innerHTML = r[0];
+      tr.appendChild(td0);
+      for (var i=1;i<r.length;i++){
+        var td = document.createElement('td');
+        td.className='num';
+        td.textContent = r[i].toFixed(2)+'%';
+        td.style.background = heatColor(r[i]);
+        if (i===1 && r[1] >= 1) td.style.fontWeight='700';
+        tr.appendChild(td);
+      }
+      tbl.appendChild(tr);
+    });
+  }
+
+  // ── Tabs + lazy chart init ───────────────────────────────
+  function initCharts(section){
+    section.querySelectorAll('canvas').forEach(function(cv){
+      if (built[cv.id] || !charts[cv.id] || !window.Chart) return;
+      built[cv.id] = charts[cv.id](cv.getContext('2d'));
+    });
+  }
+
+  var tabs = document.getElementById('tabs');
+  tabs.addEventListener('click', function(e){
+    var btn = e.target.closest('button');
+    if (!btn) return;
+    tabs.querySelectorAll('button').forEach(function(b){ b.classList.toggle('active', b===btn); });
+    document.querySelectorAll('section.tab').forEach(function(s){
+      var on = s.id === btn.dataset.t;
+      s.classList.toggle('active', on);
+      if (on) initCharts(s);
+    });
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+
+  window.addEventListener('load', function(){
+    document.querySelectorAll('section.tab').forEach(initCharts);
+  });
+  initCharts(document.getElementById('overview'));
+})();
+</script>
+
+</body>
+</html>
